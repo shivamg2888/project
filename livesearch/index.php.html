@@ -1,0 +1,138 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>New Auto Complete</title>
+<script type="text/javascript" src="jquery-1.8.0.min.js"></script>
+<script type="text/javascript">
+$(function(){
+$(".search").keyup(function() 
+{ 
+var searchid = $(this).val();
+var dataString = 'search='+ searchid;
+$('.search').first().addClass('selectedVisualClass');
+if(searchid!='')
+{
+	$.ajax({
+	type: "POST",
+	url: "search.php",
+	data: dataString,
+	cache: false,
+	success: function(html)
+	{
+	$("#result").html(html).show();
+	}
+	});
+}return false;    
+});
+
+jQuery("#result").live("click",function(e){ 
+	var $clicked = $(e.target);
+	var $name = $clicked.find('.name').html();
+	var decoded = $("<div/>").html($name).text();
+	$('#searchid').val(decoded);
+});
+jQuery(document).live("click", function(e) { 
+	var $clicked = $(e.target);
+	if (! $clicked.hasClass("search")){
+	jQuery("#result").fadeOut(); 
+	}
+});
+$('#searchid').click(function(){
+	jQuery("#result").fadeIn();
+});
+});
+</script>
+<style type="text/css">
+	body{ 
+		font-family:Tahoma, Geneva, sans-serif;
+		font-size:18px;
+	}
+	.content{
+		width:900px;
+		margin:0 auto;
+	}
+	#searchid
+	{
+		width:500px;
+		border:solid 1px #000;
+		padding:10px;
+		font-size:14px;
+	}
+	#result
+	{
+		position:absolute;
+		width:500px;
+		padding:0px;
+		display:none;
+		margin-top:0px;
+		border-top:0px;
+		overflow:hidden;
+		border:1px #CCC solid;
+		background-color: white;
+	}
+	.show
+	{
+		padding:10px; 
+		border-bottom:1px #999 dashed;
+		font-size:15px; 
+		height:50px;
+	}
+	.show:hover
+	{
+		background:#4c66a4;
+		color:#FFF;
+		cursor:pointer;
+	}
+	.search1{
+   padding: 6px 10px;
+  -webkit-border-radius: 2px 2px;
+  border: solid 1px rgb(153, 153, 153);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(221, 221, 221)));
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  text-shadow: 0px 1px 1px rgba(255,255,255,1);
+  line-height: 1;
+	}
+</style>
+</head>
+
+<body>
+<!--started working on the geo location based ip tracking-->
+<?php
+//ip information of the client
+/*function getClientIP() {
+
+    if (isset($_SERVER)) {
+
+        if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
+            return $_SERVER["HTTP_X_FORWARDED_FOR"];
+
+        if (isset($_SERVER["HTTP_CLIENT_IP"]))
+            return $_SERVER["HTTP_CLIENT_IP"];
+
+        return $_SERVER["REMOTE_ADDR"];
+    }
+
+    if (getenv('HTTP_X_FORWARDED_FOR'))
+        return getenv('HTTP_X_FORWARDED_FOR');
+
+    if (getenv('HTTP_CLIENT_IP'))
+        return getenv('HTTP_CLIENT_IP');
+
+    return getenv('REMOTE_ADDR');
+}
+echo getClientIP();*/
+?>
+<br>
+<div class="content">
+<input type="text" class="search" id="searchid" placeholder="Search by keyword . I am Intelligent , i can recognise !!!" />
+<input type="Submit" class="search1" id="search2" value="Search"> 
+
+<div id="result">
+</div>
+</div>
+<br>
+</body>
+</html>
